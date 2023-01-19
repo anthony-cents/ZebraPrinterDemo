@@ -18,8 +18,36 @@
         app:layout_constraintVertical_bias="0.2"
         app:layout_constraintHorizontal_bias="0.5"/>
 
-    <android.widget.Button
-        android:id="@+id/get_serial"
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:text="Request USB Permission"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintWidth_percent="0.15"
+        app:layout_constraintHorizontal_bias="0.3"/>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:text="Print"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintWidth_percent="0.15"
+        app:layout_constraintHorizontal_bias="0.5"/>
+
+    <Button
+        android:id="@+id/button3"
         android:layout_width="0sp"
         android:layout_height="0sp"
         android:text="Get Serial Number"
@@ -30,6 +58,6 @@
         app:layout_constraintHeight_percent="0.2"
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintWidth_percent="0.15"
-        app:layout_constraintHorizontal_bias="0.15"/>
+        app:layout_constraintHorizontal_bias="0.7"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
