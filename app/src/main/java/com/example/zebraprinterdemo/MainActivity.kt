@@ -33,10 +33,12 @@ class MainActivity : Activity() {
     private var buttonPrint: Button? = null
     private var buttonSerial: Button? = null
     private var discoveredPrinterUsb: DiscoveredPrinterUsb? = null
+    private val TAG = "MainActivity"
 
     // Catches intent indicating if the user grants permission to use the USB device
     private val mUsbReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
+            Log.d(TAG, "Requesting USB permission")
             val action = intent.action
             if (ACTION_USB_PERMISSION == action) {
                 synchronized(this) {
@@ -65,6 +67,7 @@ class MainActivity : Activity() {
 
         // Request Permission button click
         buttonRequestPermission!!.setOnClickListener {
+            Log.d(TAG, "Button request USB permission")
             Thread { // Find connected printers
                 val handler: UsbDiscoveryHandler = UsbDiscoveryHandler()
                 UsbDiscoverer.findPrinters(applicationContext, handler)
@@ -100,7 +103,9 @@ class MainActivity : Activity() {
                 try {
                     conn = discoveredPrinterUsb!!.connection
                     conn.open()
-                    conn.write("~WC".toByteArray())
+                    val stickerZPL = buildSticker("WF-80209", "Chester McTester III", "B 7", "H 11")
+                    Log.d(TAG, stickerZPL)
+                    conn.write(stickerZPL.toByteArray())
                 } catch (e: ConnectionException) {
                     Toast.makeText(
                         applicationContext,
@@ -132,7 +137,6 @@ class MainActivity : Activity() {
                     Log.d("Main Activity", mUsbManager.toString())
                     Log.d("Main Activity", discoveredPrinterUsb!!.device.toString())
                     usbConn = UsbConnection(mUsbManager, discoveredPrinterUsb!!.device)
-                    Log.d("Main Activity", usbConn.serialNumber)
                 } catch (e: ConnectionException) {
                     Toast.makeText(
                         applicationContext,
@@ -156,6 +160,19 @@ class MainActivity : Activity() {
                 ).show()
             }
         }
+    }
+
+    private fun buildSection(text: String, xPos: String, yPos: String, fontHeight: String, fontWidth: String) : String{
+        return "^FO$xPos,$yPos^ADR,$fontHeight,$fontWidth^FD$text^FS"
+    }
+
+    private fun buildSticker(orderNum: String, customerName: String, bags: String, hangs: String): String{
+        val orderSection = buildSection(orderNum, "480", "60", "100", "60")
+        val nameSection = buildSection(customerName, "400", "60", "70", "30")
+        val horizontalLine = "^FO375,60^GB1,700,4^FS"
+        val bagSection = buildSection(bags, "250", "70", "60", "30")
+        val hangSection = buildSection(hangs, "250", "300", "60", "30")
+        return "^XA$orderSection$nameSection$horizontalLine$bagSection$hangSection^XZ~PS"
     }
 
     override fun onPause() {
